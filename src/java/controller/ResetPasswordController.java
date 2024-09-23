@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.PasswordResetTokenDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "Homepage", urlPatterns = {"/home"})
-public class Homepage extends HttpServlet {
+@WebServlet(name = "ResetPasswordController", urlPatterns = {"/reset-password"})
+public class ResetPasswordController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +32,18 @@ public class Homepage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ResetPasswordController</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ResetPasswordController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -46,7 +58,35 @@ public class Homepage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String token = request.getParameter("token");
+
+        if (token != null && !token.isEmpty()) {
+            PasswordResetTokenDAO tokenDAO = new PasswordResetTokenDAO();
+
+            // Check if the token is valid
+            if (tokenDAO.isTokenValid(token)) {
+                // Get the username associated with the token
+                String username = tokenDAO.getUsernameByToken(token);
+
+                if (username != null) {
+                    // Forward to the reset password page with the username
+                    request.setAttribute("username", username);
+                    request.setAttribute("token", token);
+                    request.getRequestDispatcher("/resetpass.jsp").forward(request, response);
+                } else {
+                    // Username not found for the token
+                    request.setAttribute("message", "Invalid token.");
+                    request.getRequestDispatcher("/result.jsp").forward(request, response);
+                }
+            } else {
+                // Token is either expired or already used
+                request.setAttribute("message", "Token is invalid or has expired.");
+                request.getRequestDispatcher("/result.jsp").forward(request, response);
+            }
+        } else {
+            // Token parameter is missing
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
     }
 
     /**

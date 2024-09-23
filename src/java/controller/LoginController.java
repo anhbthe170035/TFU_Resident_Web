@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dao.UserDAO;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "Homepage", urlPatterns = {"/home"})
-public class Homepage extends HttpServlet {
+@WebServlet(name = "LoginController", urlPatterns = {"/login"})
+public class LoginController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +34,18 @@ public class Homepage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet LoginController</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet LoginController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,7 +74,32 @@ public class Homepage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Create an instance of UserDAO
+        UserDAO ud = new UserDAO();
+        // Set the parameters of username and password
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        // Check login of user
+        User u = ud.checkLogin(email, password);
+        
+        // Only proceed if both username and password are provided
+        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+        
+        if (u == null){
+            // If the user is not found (invalid credentials), set an error message
+            request.setAttribute("error", "Wrong username or password");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+
+        }
+        else{
+            // If the user credentials are valid, create a new session
+            HttpSession session = request.getSession();
+            session.setAttribute("user", u);
+            request.getRequestDispatcher("home").forward(request, response);
+        }
     }
 
     /**

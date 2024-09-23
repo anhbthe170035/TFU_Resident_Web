@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dao.UserDAO;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "Homepage", urlPatterns = {"/home"})
-public class Homepage extends HttpServlet {
+@WebServlet(name = "RegisterController", urlPatterns = {"/register"})
+public class RegisterController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,10 +33,41 @@ public class Homepage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        UserDAO ud = new UserDAO();
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String re_password = request.getParameter("re_password");
+        String email = request.getParameter("email");
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(hashPassword(password)); // Ensure passwords are hashed
+        user.setEmail(email);
+
+        UserDAO userDAO = new UserDAO();
+
+        if (password.equals(re_password)) {
+            if (userDAO.checkAccoutExist(username)){
+                request.setAttribute("error", "Username is exist");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+            }
+            else if (userDAO.checkEmailExist(email)) {
+                request.setAttribute("error", "Email is exist");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+            } else {
+                userDAO.addUser(user);
+                request.setAttribute("error", "Login to Continue");
+
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+        } else {
+            request.setAttribute("error", "Password not equal Repeat Password");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -72,5 +105,9 @@ public class Homepage extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private String hashPassword(String password) {
+        return password;
+    }
 
 }

@@ -11,13 +11,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "Homepage", urlPatterns = {"/home"})
-public class Homepage extends HttpServlet {
+@WebServlet(name = "LogoutController", urlPatterns = {"/logout"})
+public class LogoutController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +32,12 @@ public class Homepage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+         // Obtain the current HTTP session.
+        HttpSession session = request.getSession();
+        // Remove the attribute "user" from the session, effectively logging the user out
+        session.removeAttribute("user");
+        // Redirect the client to the "home" page
+        response.sendRedirect("home");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
