@@ -37,34 +37,11 @@
                 </li>
 
                 <li class="nav-item active">
-                    <c:if test="${sessionScope.user != null}">
-                        <c:if test="${sessionScope.user.role == '0'}">
-                            <a class="nav-link" href="orderListAdmin">Orders <span class="sr-only">(current)</span></a>
-                        </c:if>
-                        <c:if test="${sessionScope.user.role == '2'}">
-                            <a class="nav-link" href="orderUser?userName=${sessionScope.user.username}">Orders <span class="sr-only">(current)</span></a>
-                        </c:if>
-                    </c:if>
-                </li>
-
-                <li class="nav-item active">
                     <c:if test="${sessionScope.user == null}">
                         <a class="nav-link" href="login.jsp">Cart <span class="sr-only">(current)</span></a>
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
                         <a class="nav-link" href="cart">Cart <span class="sr-only">(current)</span></a>
-                    </c:if>
-                </li>
-
-                <li class="nav-item active">
-                    <c:if test="${sessionScope.user != null && sessionScope.user.role == 0}">
-                        <a class="nav-link" href="userlist">User List <span class="sr-only">(current)</span></a>
-                    </c:if>
-                </li>
-                
-                <li class="nav-item active">
-                    <c:if test="${sessionScope.user != null && sessionScope.user.role == 2}">
-                        <a class="nav-link" href="feedback.jsp">Feedback <span class="sr-only">(current)</span></a>
                     </c:if>
                 </li>
 
@@ -83,7 +60,7 @@
                 <form class="form-inline my-2 my-lg-0">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            ${sessionScope.user.name}
+                            ${sessionScope.user.username}
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="profile.jsp">Profile</a>
@@ -91,17 +68,6 @@
                             <a class="dropdown-item" href="logout">Logout</a>
                         </div>
                     </div>
-                </form>
-            </c:if>
-            <c:if test="${sessionScope.user != null && sessionScope.user.role == 0}">
-                <form class="form-inline my-2 my-lg-0">
-
-                    <a href="admin.jsp" class="btn btn-outline-success my-2 my-sm-0 btn-nav">Admin</a>
-                </form>
-            </c:if>
-            <c:if test="${sessionScope.user != null && sessionScope.user.role == 1}">
-                <form class="form-inline my-2 my-lg-0">
-                    <a href="admin.jsp" class="btn btn-outline-success my-2 my-sm-0 btn-nav">Employee</a>
                 </form>
             </c:if>
         </div>

@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Happy program</title>
+        <title>DRUGSTORE</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
         <style>
@@ -115,7 +115,7 @@
                 <div class="card p-2 text-center">
                     <h6>Please enter code send to your email <br> to verify your account</h6>
                     <form action="VerifyEmail" method="post">
-                    <div> <span>A code has been sent to ${email}</span> <small></small> </div>
+                    <div> <span>A code has been sent to your email</span> <small></small> </div>
                     
                         <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
                             <input class="m-2 text-center form-control rounded" type="number" name="first" id="first" maxlength="1" />

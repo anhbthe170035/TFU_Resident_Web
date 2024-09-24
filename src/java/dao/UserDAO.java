@@ -16,10 +16,10 @@ import java.util.List;
  *
  * @author Admin
  */
-public class UserDAO extends DBContext{
+public class UserDAO extends DBContext {
 
     public User checkLogin(String email, String password) {
-        String sql = "select * from [Users] where [username] = ? and [password] = ?;";
+        String sql = "select * from [dbo].[Users] where [Email] = ? and [PasswordHash] = ?;";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
@@ -43,7 +43,7 @@ public class UserDAO extends DBContext{
         }
         return null;
     }
-    
+
     public boolean checkAccoutExist(String username) {
         String query = "select * from [dbo].[Users] where username = ?";
         try {
@@ -81,9 +81,15 @@ public class UserDAO extends DBContext{
             throw new IllegalArgumentException("User hoặc username không thể null");
         }
 
-        String query = "INSERT INTO [dbo].[Users] "
-                + "([username], [email], [password]) "
-                + "VALUES (?, ?, ?)";
+        String query = "INSERT INTO [dbo].[Users]\n"
+                + "           ([Username]\n"
+                + "           ,[PasswordHash]\n"
+                + "           ,[Email]\n"
+                + "     VALUES\n"
+                + "           (<Username, nvarchar(50),>\n"
+                + "           ,<PasswordHash, nvarchar(255),>\n"
+                + "           ,<Email, nvarchar(100),>\n"
+                + "GO";
 
         try (PreparedStatement st = connection.prepareStatement(query)) {
 
@@ -135,6 +141,31 @@ public class UserDAO extends DBContext{
                         rs.getInt(7),
                         rs.getDate(8)
                 );
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public User getUserByEmail(String email) {
+        String sql = "select * from [Users] where [email] = ?;";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getInt(7),
+                        rs.getDate(8)
+                );
+                return user;
             }
         } catch (SQLException e) {
             System.out.println(e);

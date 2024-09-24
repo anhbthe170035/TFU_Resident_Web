@@ -6,23 +6,21 @@ package controller;
 
 import dao.UserDAO;
 import entity.User;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Random;
-import service.SendEmail;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "RegisterController", urlPatterns = {"/register"})
-public class RegisterController extends HttpServlet {
+@WebServlet(name = "VerifyEmail", urlPatterns = {"/VerifyEmail"})
+public class VerifyEmail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,38 +34,21 @@ public class RegisterController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String username = request.getParameter("username").trim();
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String re_password = request.getParameter("re_password");
-
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(hashPassword(password)); // Ensure passwords are hashed
-
-        UserDAO userDAO = new UserDAO();
-        List<User> list = userDAO.getUser();
-
-        if (userDAO.checkEmailExist(email)) {
-            request.setAttribute("error", "Email is exist");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        } else if (!password.equals(re_password)) {
-            request.setAttribute("error", "Password not equal Repeat Password");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        } else {
-            String code = getRandom();
-            SendEmail se = new SendEmail();
-            se.sendEmail(email, "Your code is :", code);
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            session.setAttribute("code", code);
-            
-            request.getRequestDispatcher("verifyemail.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet VerifyEmail</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet VerifyEmail at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -93,7 +74,23 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        PrintWriter out = response.getWriter();
+        String code_ip = request.getParameter("first") + request.getParameter("second")
+                + request.getParameter("third") + request.getParameter("fourth")
+                + request.getParameter("fifth") + request.getParameter("sixth");
+        HttpSession session = request.getSession();
+        String code = (String) session.getAttribute("code");
+
+        if (code_ip.equals(code)) {
+            UserDAO ud = new UserDAO();
+            User user = (User) session.getAttribute("user");
+            ud.addUser(user);
+            response.sendRedirect("home");
+
+        } else {
+            String error = "The code is not correct!";
+            request.getRequestDispatcher("verifyemail.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -105,15 +102,5 @@ public class RegisterController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private String hashPassword(String password) {
-        return password;
-    }
-
-    private String getRandom() {
-        Random rnd = new Random();
-        int number = rnd.nextInt(999999);
-        return String.format("%06d", number);
-    }
 
 }

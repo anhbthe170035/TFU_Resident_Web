@@ -53,13 +53,15 @@ public class SendEmail {
             e.printStackTrace();
         }
     }
+    
     public String getRandom() {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
         return String.format("%06d", number);
     }
-    public static void main(String[] args) {
-        SendEmail send = new SendEmail();
-        send.sendEmail("tienanhbkp03@gmail.com", "Code to verify email", send.getRandom());
-    }
+    
+//    public static void main(String[] args) {
+//        SendEmail send = new SendEmail();
+//        send.sendEmail("tienanhbkp03@gmail.com", "Code to verify email", send.getRandom());
+//    }
 }
