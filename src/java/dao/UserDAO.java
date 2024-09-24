@@ -10,6 +10,7 @@ import entity.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -81,8 +82,8 @@ public class UserDAO extends DBContext{
         }
 
         String query = "INSERT INTO [dbo].[Users] "
-                + "([username], [password], [name], [gender], [dob], [email], [phone], [status], [role]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)";
+                + "([username], [email], [password]) "
+                + "VALUES (?, ?, ?)";
 
         try (PreparedStatement st = connection.prepareStatement(query)) {
 
@@ -116,5 +117,28 @@ public class UserDAO extends DBContext{
             e.printStackTrace();
         }
         return username;
+    }
+
+    public List<User> getUser() {
+        String sql = "select * from [Users]";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getInt(7),
+                        rs.getDate(8)
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
     }
 }

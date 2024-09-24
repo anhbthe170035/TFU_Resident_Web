@@ -7,12 +7,15 @@ package controller;
 import dao.UserDAO;
 import entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Random;
+import service.SendEmail;
 
 /**
  *
@@ -33,38 +36,6 @@ public class RegisterController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        UserDAO ud = new UserDAO();
-
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String re_password = request.getParameter("re_password");
-        String email = request.getParameter("email");
-
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(hashPassword(password)); // Ensure passwords are hashed
-        user.setEmail(email);
-
-        UserDAO userDAO = new UserDAO();
-
-        if (password.equals(re_password)) {
-            if (userDAO.checkAccoutExist(username)){
-                request.setAttribute("error", "Username is exist");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
-            }
-            else if (userDAO.checkEmailExist(email)) {
-                request.setAttribute("error", "Email is exist");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
-            } else {
-                userDAO.addUser(user);
-                request.setAttribute("error", "Login to Continue");
-
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
-        } else {
-            request.setAttribute("error", "Password not equal Repeat Password");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -93,7 +64,35 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username").trim();
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String re_password = request.getParameter("re_password");
+
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(hashPassword(password)); // Ensure passwords are hashed
+
+        UserDAO userDAO = new UserDAO();
+        List<User> list = userDAO.getUser();
+
+        if (userDAO.checkEmailExist(email)) {
+            request.setAttribute("error", "Email is exist");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        } else if (!password.equals(re_password)) {
+            request.setAttribute("error", "Password not equal Repeat Password");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        } else {
+            String code = getRandom();
+            SendEmail se = new SendEmail();
+            se.sendEmail(email, "Your code is :", code);
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            session.setAttribute("code", code);
+            
+            request.getRequestDispatcher("verifyemail.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -108,6 +107,12 @@ public class RegisterController extends HttpServlet {
 
     private String hashPassword(String password) {
         return password;
+    }
+
+    private String getRandom() {
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        return String.format("%06d", number);
     }
 
 }
