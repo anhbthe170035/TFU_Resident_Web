@@ -28,6 +28,10 @@
                 <input type="password" id="repeatpassword" class="form-control" placeholder="Reset Password" required autofocus="" name="re_password">
                 <br/>
                 <h6>${error}</h6>
+                <div class="content d-flex justify-content-center align-items-center">
+                    <span>Already have an account?</span>
+                    <a href="login.jsp" class="text-decoration-none ms-6">Login</a>
+                </div>
                 <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Register</button>
 
             </form>

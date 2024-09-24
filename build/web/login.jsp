@@ -22,11 +22,11 @@
             <input type="email" id="inputEmail" class="form-control" placeholder="Email" required="" autofocus="" name="email">
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
             <h6 style="padding: 10px 0">${error}</h6>
-            <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
-            <a href="forgetPass.jsp" id="forgot_pswd">Forgot password?</a>
+            <div class="content d-flex justify-content-center align-items-center"><a href="forgetPass.jsp" id="forgot_pswd">Forgot password?</a></div>
             <div class="text-center mt-4">
-                Don't have an account? <a href="register.jsp" class="text-primary">Register</a>
+                <a href="register.jsp" class="text-primary">Register New Account</a>
             </div>
+            <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
         </form>
     </form>
 
