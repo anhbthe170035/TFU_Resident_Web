@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,10 +29,15 @@ public class UserDAO {
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
+
+            // Đặt giá trị cho các tham số
             ps.setString(1, username);
-            ps.setString(2, Encryption.MD5Encryption(password));
-            ResultSet rs = ps.executeQuery();
+            ps.setString(2, password);
+
+            // Thực thi câu lệnh SQL
+            rs = ps.executeQuery();
+
+            // Xử lý kết quả
             while (rs.next()) {
                 return new User(
                         rs.getInt(1),
@@ -46,6 +53,17 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            // Đóng tài nguyên
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return null;
     }
@@ -107,7 +125,7 @@ public class UserDAO {
             ps.setString(2, user.getFullname());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPhone());
-            ps.setString(5, Encryption.MD5Encryption(user.getPassword()));
+            ps.setString(5, user.getPassword());
 
             int rowsAffected = ps.executeUpdate();
             System.out.println(1);
@@ -199,5 +217,16 @@ public class UserDAO {
             }
         }
         return false;
+    }
+    public static void main(String[] args) {
+        try {
+            UserDAO dao = new UserDAO();
+            String username ="tienab1";
+            String password = "timmy123";
+            User p = dao.checkLogin(username, password);
+            System.out.println(p);
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

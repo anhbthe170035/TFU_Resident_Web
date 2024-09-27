@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Menu -->
 <nav class="navbar navbar-expand-md navbar-dark">
@@ -49,15 +50,16 @@
 
             <c:if test="${sessionScope.user == null}">
                 <form class="form-inline my-2 my-lg-0">
-                    <a class="btn btn-outline-success my-2 my-sm-0 btn-nav" href="login.jsp">Đăng nhập</a>
-                    <a class="btn btn-outline-success my-2 my-sm-0 btn-nav" href="register.jsp">Đăng ký</a>
+                    <a href="login.jsp" class="btn btn-outline-success my-2 my-sm-0 btn-nav">Đăng nhập</a>
+                    <a href="register.jsp" class="btn btn-outline-success my-2 my-sm-0 btn-nav">Đăng ký</a>
                 </form>
             </c:if>
 
             <c:if test="${sessionScope.user != null}">
                 <form class="form-inline my-2 my-lg-0">
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             ${sessionScope.user.username}
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -66,8 +68,10 @@
                             <a class="dropdown-item" href="logout">Logout</a>
                         </div>
                     </div>
+
                 </form>
             </c:if>
+
         </div>
     </div>
 </nav>
