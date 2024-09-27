@@ -84,14 +84,14 @@ public class LoginController extends HttpServlet {
         
         // Only proceed if both username and password are provided
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         }
         
         if (u == null){
             // If the user is not found (invalid credentials), set an error message
             request.setAttribute("error", "Wrong username or password");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
 
         }
         else{

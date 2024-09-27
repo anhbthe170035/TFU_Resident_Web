@@ -17,7 +17,6 @@ import java.util.List;
  * @author Admin
  */
 public class UserDAO extends DBContext {
-
     public User checkLogin(String email, String password) {
         String sql = "select * from [dbo].[Users] where [Email] = ? and [PasswordHash] = ?;";
         try {
@@ -32,9 +31,10 @@ public class UserDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getDate(6),
+                        rs.getString(6),
                         rs.getInt(7),
-                        rs.getDate(8)
+                        rs.getInt(8),
+                        rs.getInt(9)
                 );
                 return user;
             }
@@ -83,12 +83,12 @@ public class UserDAO extends DBContext {
 
         String query = "INSERT INTO [dbo].[Users]\n"
                 + "           ([Username]\n"
-                + "           ,[PasswordHash]\n"
+                + "           ,[Fullname]\n"
                 + "           ,[Email]\n"
+                + "           ,[PhoneNumber]\n"
+                + "           ,[PasswordHash])\n"
                 + "     VALUES\n"
-                + "           (<Username, nvarchar(50),>\n"
-                + "           ,<PasswordHash, nvarchar(255),>\n"
-                + "           ,<Email, nvarchar(100),>\n"
+                + "           (?,?,?,?,?)"
                 + "GO";
 
         try (PreparedStatement st = connection.prepareStatement(query)) {
@@ -137,9 +137,10 @@ public class UserDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getDate(6),
+                        rs.getString(6),
                         rs.getInt(7),
-                        rs.getDate(8)
+                        rs.getInt(8),
+                        rs.getInt(9)
                 );
             }
         } catch (SQLException e) {
@@ -161,9 +162,10 @@ public class UserDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getDate(6),
+                        rs.getString(6),
                         rs.getInt(7),
-                        rs.getDate(8)
+                        rs.getInt(8),
+                        rs.getInt(9)
                 );
                 return user;
             }

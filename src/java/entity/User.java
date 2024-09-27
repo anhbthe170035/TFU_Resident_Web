@@ -4,7 +4,6 @@
  */
 package entity;
 
-import java.util.Date;
 
 /**
  *
@@ -13,27 +12,29 @@ import java.util.Date;
 public class User {
     private int userId;
     private String username;
-    private String password;
+    private String fullname;
     private String email;
-    private String usertypeId;
-    private Date createdAt;
+    private String phone;
+    private String password;
     private int isActive;
-    private Date lastLogin;
+    private int pharmacyId;
+    private int roleId;
 
     public User() {
     }
 
-    public User(int userId, String username, String password, String email, String usertypeId, Date createdAt, int isActive, Date lastLogin) {
+    public User(int userId, String username, String fullname, String email, String phone, String password, int isActive, int pharmacyId, int roleId) {
         this.userId = userId;
         this.username = username;
-        this.password = password;
+        this.fullname = fullname;
         this.email = email;
-        this.usertypeId = usertypeId;
-        this.createdAt = createdAt;
+        this.phone = phone;
+        this.password = password;
         this.isActive = isActive;
-        this.lastLogin = lastLogin;
+        this.pharmacyId = pharmacyId;
+        this.roleId = roleId;
     }
-
+    
     public int getUserId() {
         return userId;
     }
@@ -50,12 +51,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getEmail() {
@@ -66,20 +67,20 @@ public class User {
         this.email = email;
     }
 
-    public String getUsertypeId() {
-        return usertypeId;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUsertypeId(String usertypeId) {
-        this.usertypeId = usertypeId;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getIsActive() {
@@ -90,12 +91,20 @@ public class User {
         this.isActive = isActive;
     }
 
-    public Date getLastLogin() {
-        return lastLogin;
+    public int getPharmacyId() {
+        return pharmacyId;
     }
 
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
+    public void setPharmacyId(int pharmacyId) {
+        this.pharmacyId = pharmacyId;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 }
 

@@ -51,10 +51,10 @@ public class RegisterController extends HttpServlet {
 
         if (userDAO.checkEmailExist(email)) {
             request.setAttribute("error", "Email is exist");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } else if (!password.equals(re_password)) {
             request.setAttribute("error", "Password not equal Repeat Password");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } else {
             String code = getRandom();
             SendEmail se = new SendEmail();
