@@ -102,6 +102,7 @@
                 height: auto;
                 margin-bottom: 20px;
             }
+            
         </style>
     </head>
     <body>
@@ -118,7 +119,7 @@
                 <i class="fas fa-lock"></i>
                 <input type="password" name="password" placeholder="Mật khẩu" required>
             </div>
-            <h6 style="padding: 10px 0">${error}</h6>
+            <h6 style="padding: 10px 0; color: #F44336">${error}</h6>
             <input type="submit" value="Đăng Nhập">
         </form>
         <a href="ResetPassword.jsp">Quên mật khẩu?</a>
