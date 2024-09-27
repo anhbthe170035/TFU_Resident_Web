@@ -112,11 +112,11 @@
     <form action="register" method="post">
         <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="username" placeholder="Tên đăng nhập" required>
+            <input type="username" name="username" placeholder="Tên đăng nhập" required>
         </div>
         <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="fullname" placeholder="Họ và tên" required>
+            <input type="fullname" name="fullname" placeholder="Họ và tên" required>
         </div>
         <div class="input-group">
             <i class="fas fa-envelope"></i>
@@ -124,7 +124,7 @@
         </div>
         <div class="input-group">
             <i class="fas fa-phone"></i>
-            <input type="text" name="phone" placeholder="Số điện thoại" required>
+            <input type="phone" name="phone" placeholder="Số điện thoại" required>
         </div>
         <div class="input-group">
             <i class="fas fa-lock"></i>
@@ -136,7 +136,7 @@
         </div>
         <input type="submit" value="Đăng Ký">
     </form>
-    <a href="Login.jsp">Đã có tài khoản? Đăng nhập</a>
+    <a href="login.jsp">Đã có tài khoản? Đăng nhập</a>
 </div>
 
 </body>

@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import service.SendEmail;
 
 /**
@@ -80,9 +82,14 @@ public class RegisterController extends HttpServlet {
         user.setPassword(hashPassword(password)); // Ensure passwords are hashed
 
         UserDAO userDAO = new UserDAO();
-        List<User> list = userDAO.getUser();
+        List<User> list;
+        try {
+            list = userDAO.getUser();
+        } catch (Exception ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        if (userDAO.checkEmail(list, email)) {
+        if (userDAO.checkEmailExist(email)) {
             request.setAttribute("error", "Email is exist");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         } else if (!password.equals(re_password)) {

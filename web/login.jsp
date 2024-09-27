@@ -112,7 +112,7 @@
     <form action="login" method="post">
         <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="username" placeholder="Tên đăng nhập" required>
+            <input type="username" name="username" placeholder="Tên đăng nhập" required>
         </div>
         <div class="input-group">
             <i class="fas fa-lock"></i>

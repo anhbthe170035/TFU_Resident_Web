@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -80,7 +82,12 @@ public class LoginController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         // Check login of user
-        User u = ud.checkLogin(username, password);
+        User u = null;
+        try {
+            u = ud.checkLogin(username, password);
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         // Only proceed if both username and password are provided
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {

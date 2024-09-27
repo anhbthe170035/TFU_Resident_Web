@@ -17,13 +17,17 @@ import java.util.List;
  *
  * @author Admin
  */
-public class UserDAO extends DBContext {
-    Connection connection = null;
+public class UserDAO {
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
     
-    public User checkLogin(String username, String password) {
+    public User checkLogin(String username, String password) throws Exception {
         String sql = "select * from [dbo].[Users] where [Username] = ? and [PasswordHash] = ?;";
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
             ps.setString(1, username);
             ps.setString(2, Encryption.MD5Encryption(password));
             ResultSet rs = ps.executeQuery();
@@ -49,8 +53,9 @@ public class UserDAO extends DBContext {
     public boolean checkAccoutExist(String username) {
         String query = "select * from [dbo].[Users] where username = ?";
         try {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
             ps.setString(1, username);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -65,8 +70,9 @@ public class UserDAO extends DBContext {
     public boolean checkEmailExist(String email) {
         String query = "select * from [dbo].[Users] where email = ?";
         try {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
             ps.setString(1, email);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -78,7 +84,7 @@ public class UserDAO extends DBContext {
         return false;
     }
 
-    public boolean addUser(User user) {
+    public boolean addUser(User user) throws Exception {
         if (user == null || user.getUsername() == null) {
             throw new IllegalArgumentException("User hoặc username không thể null");
         }
@@ -93,15 +99,17 @@ public class UserDAO extends DBContext {
                 + "           (?,?,?,?,?)"
                 + "GO";
 
-        try (PreparedStatement st = connection.prepareStatement(query)) {
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getFullname());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPhone());
+            ps.setString(5, Encryption.MD5Encryption(user.getPassword()));
 
-            st.setString(1, user.getUsername());
-            st.setString(2, user.getFullname());
-            st.setString(3, user.getEmail());
-            st.setString(4, user.getPhone());
-            st.setString(5, Encryption.MD5Encryption(user.getPassword()));
-
-            int rowsAffected = st.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
             System.out.println(1);
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -111,14 +119,17 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public String getUsernamebyEmail(String email) {
+    public String getUsernamebyEmail(String email) throws Exception {
         String username = null;
         String query = "SELECT username FROM Users WHERE email = ?";
 
-        try (PreparedStatement st = connection.prepareStatement(query)) {
-            st.setString(1, email);
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            ps.setString(1, email);
 
-            try (ResultSet rs = st.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     username = rs.getString("username");
                 }
@@ -129,11 +140,12 @@ public class UserDAO extends DBContext {
         return username;
     }
 
-    public List<User> getUser() {
+    public List<User> getUser() throws Exception {
         String sql = "select * from [Users]";
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
             while (rs.next()) {
                 User user = new User(
                         rs.getInt(1),
@@ -153,12 +165,13 @@ public class UserDAO extends DBContext {
         return null;
     }
 
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws Exception {
         String sql = "select * from [Users] where [email] = ?;";
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User user = new User(
                         rs.getInt(1),
