@@ -42,12 +42,12 @@
         }
 
         .register-container form {
-            margin-top: 20px;
+            margin-top: 0px;
         }
 
         .register-container .input-group {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .register-container .input-group input {
@@ -109,7 +109,11 @@
     <!-- Logo của nhà thuốc Long Châu -->
     <img src="https://vectorseek.com/wp-content/uploads/2023/10/FPT-Retail-Nha-thuoc-Long-Chau-Logo-Vector.svg-.png" alt="Nhà Thuốc Long Châu Logo">
     <h1>Đăng Ký</h1>
-    <form action="RegisterServlet" method="post">
+    <form action="register" method="post">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Tên đăng nhập" required>
+        </div>
         <div class="input-group">
             <i class="fas fa-user"></i>
             <input type="text" name="fullname" placeholder="Họ và tên" required>

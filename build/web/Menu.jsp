@@ -31,7 +31,7 @@
                     <a class="nav-link" href="#">Liên hệ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Login.jsp">Đăng nhập</a>
+                    <a class="nav-link" href="login.jsp">Đăng nhập</a>
                 </li>
             </ul>
 

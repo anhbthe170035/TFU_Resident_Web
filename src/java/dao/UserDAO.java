@@ -7,6 +7,7 @@ package dao;
 import context.DBContext;
 import controller.Encryption;
 import entity.User;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,15 +18,17 @@ import java.util.List;
  * @author Admin
  */
 public class UserDAO extends DBContext {
-    public User checkLogin(String email, String password) {
-        String sql = "select * from [dbo].[Users] where [Email] = ? and [PasswordHash] = ?;";
+    Connection connection = null;
+    
+    public User checkLogin(String username, String password) {
+        String sql = "select * from [dbo].[Users] where [Username] = ? and [PasswordHash] = ?;";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, email);
+            ps.setString(1, username);
             ps.setString(2, Encryption.MD5Encryption(password));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                User user = new User(
+                return new User(
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
@@ -36,7 +39,6 @@ public class UserDAO extends DBContext {
                         rs.getInt(8),
                         rs.getInt(9)
                 );
-                return user;
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -94,15 +96,17 @@ public class UserDAO extends DBContext {
         try (PreparedStatement st = connection.prepareStatement(query)) {
 
             st.setString(1, user.getUsername());
-            st.setString(2, Encryption.MD5Encryption(user.getPassword()));
+            st.setString(2, user.getFullname());
             st.setString(3, user.getEmail());
+            st.setString(4, user.getPhone());
+            st.setString(5, Encryption.MD5Encryption(user.getPassword()));
 
             int rowsAffected = st.executeUpdate();
             System.out.println(1);
             return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println(2);
+            System.out.println(5);
             return false;
         }
     }
@@ -173,5 +177,14 @@ public class UserDAO extends DBContext {
             System.out.println(e);
         }
         return null;
+    }
+    
+    public boolean checkEmail(List<User> list, String email) {
+        for (User user : list) {
+            if (user.getEmail().equals(email)) {
+               return true;
+            }
+        }
+        return false;
     }
 }
