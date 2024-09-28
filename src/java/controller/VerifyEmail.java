@@ -14,6 +14,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -84,7 +86,11 @@ public class VerifyEmail extends HttpServlet {
         if (code_ip.equals(code)) {
             UserDAO ud = new UserDAO();
             User user = (User) session.getAttribute("user");
-            ud.addUser(user);
+            try {
+                ud.addUser(user);
+            } catch (Exception ex) {
+                Logger.getLogger(VerifyEmail.class.getName()).log(Level.SEVERE, null, ex);
+            }
             response.sendRedirect("home");
 
         } else {
