@@ -56,19 +56,14 @@
             </c:if>
 
             <c:if test="${sessionScope.user != null}">
-                <form class="form-inline my-2 my-lg-0">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            ${sessionScope.user.username}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Settings</a>
-                            <div class="dropdown-divider"></div> <!-- Ngăn cách giữa các item -->
-                            <a class="dropdown-item" href="logout">Logout</a> <!-- Thêm nút logout -->
-                        </div>
-                    </div>
-                </form>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <span class="navbar-text">Hello, ${sessionScope.user.username}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout">Logout</a>
+                    </li>
+                </ul>
             </c:if>
 
         </div>
