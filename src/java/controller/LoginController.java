@@ -4,8 +4,8 @@
  */
 package controller;
 
-import dao.UserDAO;
-import entity.User;
+import dao.CustomerDAO;
+import entity.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -77,20 +77,20 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Create an instance of UserDAO
-        UserDAO ud = new UserDAO();
+        CustomerDAO cd = new CustomerDAO();
         // Set the parameters of username and password
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         // Check login of user
 
         try {
-            User u = ud.checkLogin(username, password);
+            Customer c = cd.checkLogin(username, password);
             if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
-            if (u == null) {
+            if (c == null) {
                 // If the user is not found (invalid credentials), set an error message
                 request.setAttribute("error", "Wrong username or password");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -98,7 +98,7 @@ public class LoginController extends HttpServlet {
             } else {
                 // If the user credentials are valid, create a new session
                 HttpSession session = request.getSession();
-                session.setAttribute("user", u);
+                session.setAttribute("customer", c);
                 request.getRequestDispatcher("home").forward(request, response);
             }
 

@@ -35,7 +35,7 @@ public class LogoutController extends HttpServlet {
          // Obtain the current HTTP session.
         HttpSession session = request.getSession();
         // Remove the attribute "user" from the session, effectively logging the user out
-        session.removeAttribute("user");
+        session.removeAttribute("customer");
         // Redirect the client to the "home" page
         response.sendRedirect("home");
     }

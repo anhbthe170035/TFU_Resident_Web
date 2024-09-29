@@ -102,6 +102,28 @@
                 height: auto;
                 margin-bottom: 20px;
             }
+
+            .input-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .input-group input {
+                flex: 1;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+
+            .input-group i {
+                margin-right: 5px;
+            }
+
+            .input-group select {
+                width: 79.5%;
+                padding: 8px;
+                box-sizing: border-box;
+            }
         </style>
     </head>
     <body>
@@ -117,15 +139,25 @@
                 </div>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="fullname" name="fullname" placeholder="Họ và tên" required>
+                    <input type="firstName" name="firstName" placeholder="Họ khách hàng" required>
+                    <i class="fas fa-user"></i>
+                    <input type="lastName" name="lastName" placeholder="Tên khách hàng" required>
                 </div>
+                <label class="label-custom" style="margin-right: 330px; color: #000">Sinh nhật</label>
                 <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" placeholder="Email" required>
+                    <i class="fas fa-calendar"></i>
+                    <input type="date" name="dob" required>
+                </div>
+                <div class="input-group">    
+                    <label class="label-custom" style="margin-right: 10px; color: #000">Giới tính</label>
+                    <select name="gender" style="" required>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-phone"></i>
-                    <input type="phone" name="phone" placeholder="Số điện thoại" required>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>

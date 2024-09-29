@@ -4,8 +4,8 @@
  */
 package controller;
 
-import dao.UserDAO;
-import entity.User;
+import dao.CustomerDAO;
+import entity.Customer;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -68,31 +68,31 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
         String username = request.getParameter("username");
-        String fullname = request.getParameter("fullname").trim();
+        String dob = request.getParameter("dob");
+        int gender = Integer.parseInt(request.getParameter("gender"));
         String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         String re_password = request.getParameter("re_password");
-        User user = new User(0, username, fullname, email, phone, password);
-//        user.setUsername(username);
-//        user.setFullname(fullname);
-//        user.setEmail(email);
-//        user.setPhone(phone);
-//        user.setPassword(password); // Ensure passwords are hashed
+        Customer customer = new Customer(0, firstName, lastName, username, dob, gender);
 
         PrintWriter out = response.getWriter();
 
-        UserDAO userDAO = new UserDAO();
-        List<User> list;
+        CustomerDAO cd = new CustomerDAO();
+        List<Customer> list;
         try {
-            list = userDAO.getUser();
+            list = cd.getCustomers();
         } catch (Exception ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (userDAO.checkEmailExist(email)) {
-            request.setAttribute("error", "Email is exist");
+        if (cd.checkUsernameExist(username)) {
+            request.setAttribute("error", "This username is exist");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        } else if (cd.checkEmailExist(email)) {
+            request.setAttribute("error", "This email is already registered");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         } else if (!password.equals(re_password)) {
             request.setAttribute("error", "Password not equal Repeat Password");
@@ -102,7 +102,7 @@ public class RegisterController extends HttpServlet {
             SendEmail se = new SendEmail();
             se.sendEmail(email, "Your code is :", code);
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute("customer", customer);
             session.setAttribute("code", code);
 
             request.getRequestDispatcher("verifyemail.jsp").forward(request, response);
