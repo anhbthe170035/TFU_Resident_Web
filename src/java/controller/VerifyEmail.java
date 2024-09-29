@@ -4,8 +4,8 @@
  */
 package controller;
 
-import dao.UserDAO;
-import entity.User;
+import dao.CustomerDAO;
+import entity.Customer;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -84,10 +84,10 @@ public class VerifyEmail extends HttpServlet {
         String code = (String) session.getAttribute("code");
 
         if (code_ip.equals(code)) {
-            UserDAO ud = new UserDAO();
-            User user = (User) session.getAttribute("user");
+            CustomerDAO cd = new CustomerDAO();
+            Customer customer = (Customer) session.getAttribute("customer");
             try {
-                ud.addUser(user);
+                cd.addCustomer(customer);
             } catch (Exception ex) {
                 Logger.getLogger(VerifyEmail.class.getName()).log(Level.SEVERE, null, ex);
             }

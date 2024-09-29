@@ -135,13 +135,13 @@
             <form action="register" method="post">
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="username" name="username" placeholder="Tên đăng nhập" required>
+                    <input type="firstName" name="firstName" placeholder="Họ khách hàng" required>                
+                    <i class="fas fa-user"></i>
+                    <input type="lastName" name="lastName" placeholder="Tên khách hàng" required>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="firstName" name="firstName" placeholder="Họ khách hàng" required>
-                    <i class="fas fa-user"></i>
-                    <input type="lastName" name="lastName" placeholder="Tên khách hàng" required>
+                    <input type="username" name="username" placeholder="Tên đăng nhập" required>
                 </div>
                 <label class="label-custom" style="margin-right: 330px; color: #000">Sinh nhật</label>
                 <div class="input-group">
@@ -157,6 +157,10 @@
                 </div>
                 <div class="input-group">
                     <i class="fas fa-phone"></i>
+                    <input type="phone" name="phone" placeholder="Phone" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
                     <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <div class="input-group">
@@ -167,7 +171,7 @@
                     <i class="fas fa-lock"></i>
                     <input type="password" name="re_password" placeholder="Xác nhận mật khẩu" required>
                 </div>
-                <h6 style="padding: 10px 0; color: #F44336">${error}</h6>
+                <h6 style="padding: 5px 0; color: #F44336">${error}</h6>
                 <input type="submit" value="Đăng Ký">
             </form>
             <a href="login.jsp">Đã có tài khoản? Đăng nhập</a>

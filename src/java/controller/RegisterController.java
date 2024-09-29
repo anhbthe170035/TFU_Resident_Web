@@ -73,10 +73,11 @@ public class RegisterController extends HttpServlet {
         String username = request.getParameter("username");
         String dob = request.getParameter("dob");
         int gender = Integer.parseInt(request.getParameter("gender"));
+        String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String re_password = request.getParameter("re_password");
-        Customer customer = new Customer(0, firstName, lastName, username, dob, gender);
+        Customer customer = new Customer(0, firstName, lastName, username, dob, gender, phone, email, password);
 
         PrintWriter out = response.getWriter();
 

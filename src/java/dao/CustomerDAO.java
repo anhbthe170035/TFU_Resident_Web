@@ -48,12 +48,13 @@ public class CustomerDAO {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getString(6),
-                        rs.getInt(7),
+                        rs.getInt(6),
+                        rs.getString(7),
                         rs.getString(8),
-                        rs.getTimestamp(9).toLocalDateTime(),
+                        rs.getString(9),
                         rs.getTimestamp(10).toLocalDateTime(),
-                        rs.getInt(11)
+                        rs.getTimestamp(11).toLocalDateTime(),
+                        rs.getInt(12)
                 );
             }
         } catch (SQLException e) {
@@ -87,12 +88,13 @@ public class CustomerDAO {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getString(6),
-                        rs.getInt(7),
+                        rs.getInt(6),
+                        rs.getString(7),
                         rs.getString(8),
-                        rs.getTimestamp(9).toLocalDateTime(),
+                        rs.getString(9),
                         rs.getTimestamp(10).toLocalDateTime(),
-                        rs.getInt(11)
+                        rs.getTimestamp(11).toLocalDateTime(),
+                        rs.getInt(12)
                 );
                 list.add(customer);
             }
@@ -103,7 +105,7 @@ public class CustomerDAO {
     }
 
     public boolean checkUsernameExist(String username) {
-        String query = "select * from [dbo].[Customers] where Username = ?";
+        String query = "select * from [dbo].[Customers] where [Username] = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -120,7 +122,7 @@ public class CustomerDAO {
     }
 
     public boolean checkEmailExist(String email) {
-        String query = "SELECT * FROM [dbo].[CustomerContacts] WHERE Email = ?";
+        String query = "SELECT * FROM [dbo].[Customers] WHERE [Email] = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -135,51 +137,61 @@ public class CustomerDAO {
         return false;
     }
     
-    public void saveCustomerWithEmail(Customer customer, String email, String password) {
-        String customerSql = "INSERT INTO Customers (FirstName, LastName, Username, DateOfBirth, Gender, PasswordHash, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())";
-        String contactSql = "INSERT INTO CustomerContacts (CustomerID, Email, IsPrimary) VALUES (?, ?, 1)";
+    public boolean addCustomer(Customer customer) throws Exception {
+        if (customer == null || customer.getUsername() == null) {
+            throw new IllegalArgumentException("User hoặc username không thể null");
+        }
+
+        String query = "INSERT INTO [dbo].[Customers]\n"
+                + "           ([FirstName]\n"
+                + "           ,[LastName]\n"
+                + "           ,[Username]\n"
+                + "           ,[DateOfBirth]\n"
+                + "           ,[Gender]\n"
+                + "           ,[Phone]\n"
+                + "           ,[Email]\n"
+                + "           ,[PasswordHash])\n"
+                + "     VALUES\n"
+                + "           (?,?,?,?,?,?,?,?)";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
-            // Bắt đầu transaction
-            conn.setAutoCommit(false);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
 
-            // Thêm thông tin vào bảng Customers
-            ps = conn.prepareStatement(customerSql, Statement.RETURN_GENERATED_KEYS);
+            // Set giá trị cho các tham số
             ps.setString(1, customer.getFirstName());
             ps.setString(2, customer.getLastName());
             ps.setString(3, customer.getUsername());
             ps.setString(4, customer.getDob());
             ps.setInt(5, customer.getGender());
-            ps.setString(6, customer.getPassword());
-            ps.executeUpdate();
+            ps.setString(6, customer.getPhone());
+            ps.setString(7, customer.getEmail());
+            ps.setString(8, customer.getPassword());
 
-            // Lấy CustomerID vừa tạo để thêm vào CustomerContacts
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                int customerId = rs.getInt(1);
-
-                // Thêm thông tin vào bảng CustomerContacts
-                PreparedStatement psContact = conn.prepareStatement(contactSql);
-                psContact.setInt(1, customerId);
-                psContact.setString(2, email);
-                psContact.executeUpdate();
-            }
-
-            // Commit transaction
-            conn.commit();
-
+            // Sử dụng executeUpdate cho các câu lệnh INSERT
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                conn.rollback();  // Rollback nếu có lỗi
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            return false;
         } finally {
-            try {
-                conn.setAutoCommit(true);  // Reset trạng thái auto-commit
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            // Đảm bảo đóng PreparedStatement và Connection sau khi sử dụng
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

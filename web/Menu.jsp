@@ -48,17 +48,17 @@
                 </a>
             </form>
 
-            <c:if test="${sessionScope.user == null}">
+            <c:if test="${sessionScope.customer == null}">
                 <form class="form-inline my-2 my-lg-0">
                     <a href="login.jsp" class="btn btn-outline-success my-2 my-sm-0 btn-nav">Đăng nhập</a>
                     <a href="register.jsp" class="btn btn-outline-success my-2 my-sm-0 btn-nav">Đăng ký</a>
                 </form>
             </c:if>
 
-            <c:if test="${sessionScope.user != null}">
+            <c:if test="${sessionScope.customer != null}">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <span class="navbar-text">Hello, ${sessionScope.user.username}</span>
+                        <span class="navbar-text">Hello, ${sessionScope.customer.username}</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="logout">Logout</a>

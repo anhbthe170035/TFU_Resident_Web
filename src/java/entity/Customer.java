@@ -18,28 +18,37 @@ public class Customer {
     private String username;
     private String dob;
     private int gender;
+    private String phone;
+    private String email;
     private String password;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int isActive;
 
-
-    public Customer(int customerId, String firstName, String lastName, String username, String dob, int gender) {
-        this.customerId = customerId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.dob = dob;
-        this.gender = gender;
+    public Customer() {
     }
 
-    public Customer(int customerId, String firstName, String lastName, String username, String email, String dob, int gender, String password, LocalDateTime createdAt, LocalDateTime updatedAt, int isActive) {
+    public Customer(int customerId, String firstName, String lastName, String username, String dob, int gender, String phone, String email, String password) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.dob = dob;
         this.gender = gender;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Customer(int customerId, String firstName, String lastName, String username, String dob, int gender, String phone, String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt, int isActive) {
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.dob = dob;
+        this.gender = gender;
+        this.phone = phone;
+        this.email = email;
         this.password = password;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -92,6 +101,22 @@ public class Customer {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
