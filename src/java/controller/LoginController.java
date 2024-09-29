@@ -88,8 +88,8 @@ public class LoginController extends HttpServlet {
             if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
-            }
-
+            } 
+            
             if (c == null) {
                 // If the user is not found (invalid credentials), set an error message
                 request.setAttribute("error", "Wrong username or password");
